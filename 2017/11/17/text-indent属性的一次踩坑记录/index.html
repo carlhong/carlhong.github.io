@@ -324,7 +324,7 @@
 
       
         <p>今天在看text-indent的相关细节时，了解到子元素继承的缩进值不是设定值，而是计算值。假设父元素div宽度400px,text-indent为5%，那么缩进值应该是400*5%=20px。由于text-indent只对块状元素生效，所以其所有block-level的子元素都有20px的缩进值。确保了无论段落宽度是多少，缩进距离都是一致的。</p>
-<p>目前一切正常，但是当我拿在chrome上摆弄样式时，发现一个不符合我预期的现象。<br><iframe scrolling="no" width="100%" height="300" src="http://jsfiddle.net/zz89emkr/embedded/result,html,css/light" frameborder="0" allowfullscreen></iframe></p>
+<p>目前一切正常，但是当我拿在chrome上摆弄样式时，发现一个不符合我预期的现象。<br><iframe scrolling="no" width="100%" height="300" src="https://jsfiddle.net/zz89emkr/embedded/result,html,css/light" frameborder="0" allowfullscreen></iframe></p>
 <p>第一个span元素产生了“缩进”？我又在safari和firefox下测试了一下，发现safari和chrome的表现一致，而firefox下产生的“缩进”又和其他浏览器下大小不一致。我感觉自己应该是踩到坑了。。。</p>
 <p>几次调试样式后，发现这个缩进距离和浏览器窗口大小有关，并且只有在同时满足以下条件的时候，firefox下的表现会与其他浏览器不一致。</p>
 <ul>
@@ -335,10 +335,10 @@
 <!-- viewpoint width 和 content width -->
 <p>查看text-indent在W3规范里的行为说明，一切终于水落石出。<br><a href="https://www.w3.org/TR/css-text-3/#text-indent-property/" target="_blank" rel="external">This property specifies the indentation applied to lines of inline content in a block</a></p>
 <p>以下面两段代码为例来解释一下：<br>1.</p>
-<iframe scrolling="no" width="100%" height="300" src="http://jsfiddle.net/zz89emkr/embedded/result,html,css/light" frameborder="0" allowfullscreen></iframe>
+<iframe scrolling="no" width="100%" height="300" src="https://jsfiddle.net/zz89emkr/embedded/result,html,css/light" frameborder="0" allowfullscreen></iframe>
 <p>因为div有text-indent属性，并且第一个子元素为span（行内），所以text-indent属性作用于div内，span内不会发生缩进</p>
 <p>2.</p>
-<iframe scrolling="no" width="100%" height="300" src="http://jsfiddle.net/hxzpweyp/embedded/result,html,css/light" frameborder="0" allowfullscreen></iframe>
+<iframe scrolling="no" width="100%" height="300" src="https://jsfiddle.net/hxzpweyp/embedded/result,html,css/light" frameborder="0" allowfullscreen></iframe>
 <p>父元素div有text-indent属性，但是其第一个子元素非行内元素（div），所以它的text-indent不会生效，但是子元素div会继承text-indent, 其中的文本内容可以看做被span标签包裹，所以text-indent属性生效，并且是作用于子div内。</p>
 <p>接下来还有一个firefox下渲染行为不一致的问题。查看w3文档规范，里面已经给出了明确说明：<br><a href="https://www.w3.org/TR/css-text-3/#valdef-text-indent-percentage" target="_blank" rel="external">percentage: gives the amount of the indent as a percentage of the containing block’s logical width.</a></p>
 <p>而firefox这里是在特殊场景下，使用viewport width的百分值来计算text-indent的原因了。在实际项目开发中应当避免这种场景，以免各浏览器展示效果不一致。</p>
